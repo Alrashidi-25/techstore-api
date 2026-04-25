@@ -4,45 +4,48 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage; // مهم للتعامل مع الملفات
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    // Get all products
     public function index()
     {
         $products = Product::all();
         return response()->json($products);
     }
 
-    // جلب منتج واحد فقط بناءً على الـ ID
+    // Get a single product by ID
     public function show($id)
     {
         $product = Product::find($id);
-        
+
         if ($product) {
             return response()->json($product);
         }
         return response()->json(['message' => 'Product not found!'], 404);
     }
 
+    // Create a new product
     public function store(Request $request)
     {
         $data = $request->all();
 
-        // إذا الطلب يحتوي على ملف صورة، احفظها
+        // If the request contains an image file, save it
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products', 'public');
-            $data['image'] = url('storage/' . $path); // نحفظ الرابط كامل
+            $data['image'] = $path; // Save only the relative path
         }
 
         $product = Product::create($data);
-        
+
         return response()->json([
             'message' => 'Product added successfully!',
             'product' => $product
         ], 201);
     }
 
+    // Update an existing product
     public function update(Request $request, $id)
     {
         $product = Product::find($id);
@@ -50,10 +53,10 @@ class ProductController extends Controller
         if ($product) {
             $data = $request->all();
 
-            // إذا رفع صورة جديدة، نحفظها (ونقدر نحذف القديمة لاحقاً)
+            // If a new image is uploaded, save it
             if ($request->hasFile('image')) {
                 $path = $request->file('image')->store('products', 'public');
-                $data['image'] = url('storage/' . $path);
+                $data['image'] = $path; // Save only the relative path
             }
 
             $product->update($data);
@@ -63,6 +66,7 @@ class ProductController extends Controller
         return response()->json(['message' => 'Not found!'], 404);
     }
 
+    // Delete a product
     public function destroy($id)
     {
         $product = Product::find($id);
