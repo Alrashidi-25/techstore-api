@@ -4,7 +4,7 @@ echo "=== TechStore Azure Deployment ==="
 cd /home/site/wwwroot
 
 echo "Running composer install..."
-composer install --no-dev --optimize-autoloader --no-interaction
+php composer install --no-dev --optimize-autoloader --no-interaction
 
 echo "Creating storage directories..."
 mkdir -p storage/logs
