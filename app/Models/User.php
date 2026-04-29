@@ -6,11 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens; // 👈 1. أضفنا هذا السطر
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    // 👇 2. أضفنا كلمة HasApiTokens هنا
+    // 👇 2.HasApiTokens
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -24,7 +24,7 @@ class User extends Authenticatable
         'password',
     ];
 
-    // ... باقي الكود خله زي ما هو ...
+
 
     /**
      * The attributes that should be hidden for serialization.
